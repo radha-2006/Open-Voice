@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+  body {
+    background-color: #050508;
+    color: #e2e8f0;
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: #0a0a12; }
+  ::-webkit-scrollbar-thumb { background: #3a3a5c; border-radius: 2px; }
+}
+
+@layer components {
+  .glass {
+    background: rgba(14,14,26,0.75);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(99,102,241,0.15);
+    border-radius: 16px;
+  }
+  .glass-hover {
+    @apply glass transition-all duration-300 cursor-pointer;
+  }
+  .glass-hover:hover {
+    border-color: rgba(99,102,241,0.4);
+    box-shadow: 0 0 30px rgba(99,102,241,0.1);
+  }
+  .btn-primary {
+    @apply w-full px-6 py-3 rounded-xl font-semibold text-sm text-white
+           transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed;
+    background: linear-gradient(135deg,#6366f1,#4f46e5);
+    box-shadow: 0 0 20px rgba(99,102,241,0.3);
+  }
+  .btn-primary:hover:not(:disabled) {
+    box-shadow: 0 0 35px rgba(99,102,241,0.55);
+    transform: translateY(-1px);
+  }
+  .btn-ghost {
+    @apply px-5 py-2.5 rounded-xl font-medium text-sm text-slate-300
+           border border-white/10 hover:border-brand-500/40 hover:text-white
+           hover:bg-white/5 transition-all duration-200 cursor-pointer;
+  }
+  .btn-danger  { @apply px-3 py-1.5 rounded-lg text-xs font-medium text-red-400 border border-red-500/20 hover:bg-red-500/10 hover:border-red-500/40 transition-all duration-200 cursor-pointer; }
+  .btn-success { @apply px-3 py-1.5 rounded-lg text-xs font-medium text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/10 hover:border-emerald-500/40 transition-all duration-200 cursor-pointer; }
+  .input-field {
+    @apply w-full bg-dark-600 border border-white/10 rounded-xl px-4 py-3 text-sm
+           text-white placeholder-slate-500 outline-none
+           focus:border-brand-500/60 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200;
+  }
+  .dot-live {
+    @apply w-2 h-2 rounded-full bg-emerald-400 inline-block;
+    box-shadow: 0 0 6px #34d399;
+    animation: pulse 2s infinite;
+  }
+  .badge-live { @apply inline-flex items-center gap-1.5 text-xs font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full; }
+  .badge-wait { @apply inline-flex items-center gap-1.5 text-xs font-medium text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-full; }
+}
+
+.bg-grid {
+  background-image: linear-gradient(rgba(99,102,241,0.05) 1px,transparent 1px),
+                    linear-gradient(90deg,rgba(99,102,241,0.05) 1px,transparent 1px);
+  background-size: 50px 50px;
+}
+
+.wave-bar {
+  width: 3px;
+  background: linear-gradient(to top,#6366f1,#818cf8);
+  border-radius: 2px;
+  animation: wave 1.2s ease-in-out infinite;
+}
