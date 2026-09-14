@@ -124,7 +124,7 @@ export function AttendeeJoin() {
    ROOM PAGE  — attendee's main experience after joining
    Status flow:  idle → waiting → approved → (done | rejected) → idle
 ───────────────────────────────────────────────────────────── */
-type Status = 'idle' | 'waiting' | 'approved' | 'done' | 'rejected'
+type Status = 'idle' | 'waiting' | 'approved' | 'speaking' | 'done' | 'rejected'
 
 export function AttendeeRoom() {
   const { code } = useParams<{ code: string }>()
