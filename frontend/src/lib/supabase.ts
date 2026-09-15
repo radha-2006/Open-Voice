@@ -5,7 +5,7 @@ const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJ
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-export const API = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+export const API = import.meta.env.VITE_API_URL || 'https://scintillating-joy-production-2582.up.railway.app'
 
 export async function getToken(): Promise<string> {
   const { data } = await supabase.auth.getSession()
