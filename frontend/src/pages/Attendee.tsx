@@ -134,6 +134,7 @@ export function AttendeeRoom() {
 
   const [status, setStatus]         = useState<Status>('idle')
   const [position, setPosition]     = useState<number | null>(null)
+  const [totalQueueCount, setTotalQueueCount] = useState<number>(0)
   const [question, setQuestion]     = useState('')
   const [showQ, setShowQ]           = useState(false)
   const [loading, setLoading]       = useState(false)
@@ -151,6 +152,25 @@ export function AttendeeRoom() {
   useEffect(() => {
     if (!attendeeId) navigate(`/join/${code}`)
   }, [attendeeId, code, navigate])
+
+  const updatePosition = async () => {
+    if (!eventId) return
+    const { data } = await supabase
+      .from('speaker_queue')
+      .select('attendee_id')
+      .eq('event_id', eventId)
+      .eq('status', 'waiting')
+      .order('created_at', { ascending: true })
+    if (!data) return
+    setTotalQueueCount(data.length)
+    const pos = data.findIndex(r => r.attendee_id === attendeeId)
+    setPosition(pos >= 0 ? pos + 1 : null)
+  }
+
+  // Initial position check on mount
+  useEffect(() => {
+    if (eventId) updatePosition()
+  }, [eventId])
 
   // Subscribe to queue updates for this attendee
   useEffect(() => {
@@ -205,18 +225,6 @@ export function AttendeeRoom() {
 
     return () => { ch.unsubscribe() }
   }, [attendeeId, eventId, startSpeaker, stopSpeaker])
-
-  const updatePosition = async () => {
-    const { data } = await supabase
-      .from('speaker_queue')
-      .select('attendee_id')
-      .eq('event_id', eventId!)
-      .eq('status', 'waiting')
-      .order('created_at', { ascending: true })
-    if (!data) return
-    const pos = data.findIndex(r => r.attendee_id === attendeeId)
-    setPosition(pos >= 0 ? pos + 1 : null)
-  }
 
   const requestToSpeak = async () => {
     setLoading(true); setError('')
@@ -307,7 +315,11 @@ export function AttendeeRoom() {
           <div className="w-full space-y-4">
             <div className="text-center mb-6">
               <MicRing active={false} level={0}/>
-              <h2 className="text-xl font-bold text-white mt-4 mb-1">Ready to ask?</h2>
+              <div className="mt-4 mb-2 inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-mono shadow-inner">
+                <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"/>
+                Live Queue: {totalQueueCount} {totalQueueCount === 1 ? 'person' : 'people'} waiting
+              </div>
+              <h2 className="text-xl font-bold text-white mb-1">Ready to ask?</h2>
               <p className="text-slate-400 text-sm leading-relaxed">
                 Tap the button below to join the speaker queue. The moderator will approve you when it's your turn.
               </p>
@@ -363,7 +375,10 @@ export function AttendeeRoom() {
               </svg>
             </div>
             <div>
-              <div className="badge-wait mx-auto mb-3 inline-flex">In queue</div>
+              <div className="badge-wait mx-auto mb-2 inline-flex">In queue</div>
+              <div className="text-xs text-amber-300/90 font-mono mb-2">
+                Total Queue Count: {totalQueueCount} {totalQueueCount === 1 ? 'person' : 'people'}
+              </div>
               {position !== null && (
                 <div className="text-5xl font-bold text-amber-400 my-2"
                   style={{ textShadow:'0 0 20px rgba(245,158,11,0.4)' }}>

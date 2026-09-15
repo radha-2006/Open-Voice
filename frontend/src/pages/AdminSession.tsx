@@ -87,6 +87,10 @@ export default function AdminSession() {
           <Brand/>
           <div className="flex-1"/>
           <div className="badge-live text-xs"><span className="dot-live"/>Live</div>
+          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-mono">
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"/>
+            Queue Count: {waiting.length}
+          </div>
           <code className="text-slate-500 text-xs font-mono hidden sm:block">{code}</code>
           <button
             onClick={() => window.open(`/host/${code}`, '_blank')}
